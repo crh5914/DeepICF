@@ -48,12 +48,13 @@ def batch_gen(batches, i):
     return [(batches[r])[i] for r in range(5)]
 
 def _preprocess(get_train_batch):    #generate the masked batch list
-    user_input_list, num_idx_list, item_input_list, labels_list = [], [], [], []
+    user_input_list,backet_list,num_idx_list, item_input_list, labels_list = [], [], [], [],[]
     cpu_count = 1#multiprocessing.cpu_count()
     if cpu_count == 1:
         for i in range(int(_num_batch)):
-            ui, ni, ii, l = get_train_batch(i)
+            ui, bs,ni, ii, l = get_train_batch(i)
             user_input_list.append(ui)
+            backet_list.append(bs)
             num_idx_list.append(ni)
             item_input_list.append(ii)
             labels_list.append(l)
@@ -66,7 +67,7 @@ def _preprocess(get_train_batch):    #generate the masked batch list
         num_idx_list = [r[1] for r in res]
         item_input_list = [r[2] for r in res]
         labels_list = [r[3] for r in res]
-    return (user_input_list, num_idx_list, item_input_list, labels_list)
+    return (user_input_list,backet_list,num_idx_list, item_input_list, labels_list)
 
 def _get_train_data_user():
     user_input,item_input, labels, batch_length = [],[],[],[]
@@ -117,7 +118,7 @@ def _get_train_batch_user(i):
         item_list.append(item_idx)
         labels_list.append(_labels[idx])
     user_input = np.array(user_list)
-    backets = np.array(_add_mask(_num_items, backets_list, max(num_list)))
+    backets = np.array(_add_mask(_num_items, backet_list, max(num_list)))
     num_idx = np.array(num_list)
     item_input = np.array(item_list)
     labels = np.array(labels_list)

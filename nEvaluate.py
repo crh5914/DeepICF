@@ -80,7 +80,7 @@ def load_test_as_list():
         user = rating[0]
         items = _testNegatives[idx]
         backet = _trainList[idx]
-        num_idx_ = len(user)
+        num_idx_ = len(backet)
         gtItem = rating[1]
         items.append(gtItem)
         # Get prediction scores

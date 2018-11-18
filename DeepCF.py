@@ -135,15 +135,15 @@ class DeepICF:
             self.embedding_p = self.coeff * self.embedding_p  # (?, k)
 
             #layer1 = tf.multiply(self.embedding_p, self.embedding_q)  # (?, k)
-            layer1 = tf.concat([self.embedding_p,self.embedding_q,self.embedding_u])
+            layer1 = tf.concat([self.embedding_p,self.embedding_q,self.embedding_u],axis=1)
             for i in range(len(self.n_hidden)):
                 layer1 = tf.add(tf.matmul(layer1, self.weights['h%d' % i]), self.biases['b%d' % i])
                 if self.use_batch_norm:
                     layer1 = batch_norm_layer(layer1, train_phase=self.is_train_phase, scope_bn='bn_%d' % i)
                 layer1 = tf.nn.relu(layer1)
-            out_layer = tf.matmul(layer1, self.weights['out']) + biases['out']  # (?, 1)
+            out_layer = tf.matmul(layer1, self.weights['out']) + self.biases['out']  # (?, 1)
 
-            self.output = tf.sigmoid(tf.add_n(tf.add_n([out_layer, self.bias_i]),self.bias_u))  # (?, 1)
+            self.output = tf.sigmoid(tf.add_n([tf.add_n([out_layer, self.bias_i]),self.bias_u]))  # (?, 1)
 
     def _create_loss(self):
         with tf.name_scope("loss"):
