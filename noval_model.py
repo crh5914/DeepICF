@@ -96,7 +96,7 @@ class TwoLevelAttetionModel:
         mask = tf.cast(tf.sequence_mask(self.mask,self.max_len),dtype=tf.float32)
         mask_raw_betas = tf.multiply(raw_betas,mask)
         betas = tf.div(raw_betas,tf.reduce_sum(mask_raw_betas,axis=1,keepdims=True))
-        coff = tf.expand_dims(tf.pow(self.mask,-1),axis=-1)
+        coff = tf.expand_dims(tf.pow(tf.cast(self.mask,dtype=tf.float32),-1),axis=-1)
         item_attention_weights = tf.expand_dims(betas, axis=-1)
         aggregated_backet_vec = coff*tf.reduce_sum(tf.multiply(item_attention_weights, backets_vec), axis=1)
         return aggregated_backet_vec
