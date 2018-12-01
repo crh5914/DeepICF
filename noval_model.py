@@ -111,8 +111,8 @@ class TwoLevelAttetionModel:
 def generate_train_batch(train,train_matrix,user_len,item_count,batch_size=128,negative=4):
     batch_users,batch_items,batch_uvecs,batch_masks,batch_labels = [],[],[],[],[]
     count = 0
-    for idx in range(len(train)):
-        for u,i in train[idx]:
+    for u in range(len(train)):
+        for i in train[idx]:
             row = np.nonzero(train_matrix[u])[0]
             uvec = list(row + 1)
             padd_len = user_len - len(uvec)
